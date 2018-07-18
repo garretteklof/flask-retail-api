@@ -46,7 +46,14 @@ class Item(Resource):
         return item.json(), 200
 
     def delete(self, _id):
-        pass
+        item = ItemModel.find_by_id(_id)
+        if item:
+            try:
+                item.delete_from_db()
+            except:
+                return {"message": "An internal error occurred deleting the item."}, 500
+            return {'message': 'Item deleted!'}
+        return {'message': 'Item not found.'}, 404
 
 
 class ItemList(Resource):
