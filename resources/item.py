@@ -19,7 +19,6 @@ _item_parser.add_argument('price',
 class Item(Resource):
 
     def get(self, _id):
-
         item = ItemModel.find_by_id(_id)
         if item:
             return item.json()
@@ -27,7 +26,6 @@ class Item(Resource):
         return {'message': 'Item not found'}, 404
 
     def patch(self, _id):
-
         item = ItemModel.find_by_id(_id)
         data = _item_parser.parse_args()
 
@@ -59,10 +57,10 @@ class Item(Resource):
 class ItemList(Resource):
 
     def get(self):
-        pass
+        items = [item.json() for item in ItemModel.find_all()]
+        return {'items': items}, 200
 
     def post(self):
-
         data = _item_parser.parse_args()
 
         if ItemModel.find_by_name(data['name']):
