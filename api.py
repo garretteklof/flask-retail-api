@@ -4,7 +4,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
-from resources.user import User, UserSignUp, UserLogin, UserLogout
+from resources.user import User, UserSignUp, UserLogin, UserLogout, TokenRefresh
 from resources.item import Item, ItemList
 from blacklist import BLACKLIST
 
@@ -16,7 +16,7 @@ app.config.update(
     JWT_SECRET_KEY=_JWT_SECRET_KEY_,
     PROPAGATE_EXCEPTIONS=True,
     JWT_BLACKLIST_ENABLED=True,
-    JWT_BLACKLIST_TOKEN_CHECKS=['access']
+    JWT_BLACKLIST_TOKEN_CHECKS=['access', 'refresh']
 )
 api = Api(app)
 jwt = JWTManager(app)
@@ -30,6 +30,7 @@ def check_if_token_in_blacklist(decrypted_token):
 api.add_resource(UserSignUp, '/signup')
 api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
+api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(User, '/users/<int:_id>')
 api.add_resource(ItemList, '/items')
 api.add_resource(Item, '/items/<int:_id>')
