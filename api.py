@@ -3,6 +3,7 @@ from config.config import _APP_SECRET_
 from flask import Flask
 from flask_restful import Api
 
+from resources.user import UserSignUp, User
 from resources.item import Item, ItemList
 
 app = Flask(__name__)
@@ -13,8 +14,10 @@ app.config.update(
 )
 api = Api(app)
 
-api.add_resource(Item, '/items/<int:_id>')
+api.add_resource(UserSignUp, '/signup')
+api.add_resource(User, '/users/<int:_id>')
 api.add_resource(ItemList, '/items')
+api.add_resource(Item, '/items/<int:_id>')
 
 
 @app.before_first_request
