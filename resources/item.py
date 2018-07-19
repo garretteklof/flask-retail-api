@@ -1,6 +1,6 @@
 from time import gmtime, strftime
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, jwt_optional, get_jwt_identity
 
 from models.item import ItemModel
 
@@ -52,9 +52,16 @@ class Item(Resource):
 
 class ItemList(Resource):
 
+    @jwt_optional
     def get(self):
+        current_user = get_jwt_identity()
         items = [item.json() for item in ItemModel.find_all()]
-        return {'items': items}, 200
+        if current_user:
+            return {'items': items}, 200
+        return {
+            'items': [item['name'] for item in items],
+            'message': "There's more info if you login."
+        }, 200
 
     @jwt_required
     def post(self):
