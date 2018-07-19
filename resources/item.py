@@ -1,5 +1,6 @@
 from time import gmtime, strftime
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required
 
 from models.item import ItemModel
 
@@ -18,6 +19,7 @@ _item_parser.add_argument('price',
 
 class Item(Resource):
 
+    @jwt_required
     def get(self, _id):
         item = ItemModel.find_by_id(_id)
         if item:
@@ -25,6 +27,7 @@ class Item(Resource):
 
         return {'message': 'Item not found'}, 404
 
+    @jwt_required
     def patch(self, _id):
         item = ItemModel.find_by_id(_id)
         data = _item_parser.parse_args()
@@ -43,6 +46,7 @@ class Item(Resource):
 
         return item.json(), 200
 
+    @jwt_required
     def delete(self, _id):
         item = ItemModel.find_by_id(_id)
         if item:
@@ -60,6 +64,7 @@ class ItemList(Resource):
         items = [item.json() for item in ItemModel.find_all()]
         return {'items': items}, 200
 
+    @jwt_required
     def post(self):
         data = _item_parser.parse_args()
 
