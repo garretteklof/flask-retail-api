@@ -77,6 +77,11 @@ class ItemList(Resource):
                                   required=True,
                                   help="This field cannot be left blank!"
                                   )
+        _item_parser.add_argument('store_id',
+                                  type=int,
+                                  required=True,
+                                  help="Every item needs a store_id."
+                                  )
         data = _item_parser.parse_args()
 
         if ItemModel.find_by_name(data['name']):

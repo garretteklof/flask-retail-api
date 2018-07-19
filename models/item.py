@@ -10,11 +10,15 @@ class ItemModel(db.Model):
     created_at = db.Column(db.String(30))
     updated_at = db.Column(db.String(30))
 
-    def __init__(self, name, price, created_at, updated_at=None):
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
+    store = db.relationship('StoreModel')
+
+    def __init__(self, name, price, created_at, store_id, updated_at=None):
         self.name = name.lower()
         self.price = price
         self.created_at = created_at
         self.updated_at = updated_at
+        self.store_id = store_id
 
     @classmethod
     def find_by_id(cls, _id):
@@ -34,7 +38,8 @@ class ItemModel(db.Model):
             'name': self.name,
             'price': self.price,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'store_id': self.store_id
         }
 
     def save_to_db(self):

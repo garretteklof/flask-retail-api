@@ -5,6 +5,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 from resources.user import User, UserSignUp, UserLogin, UserLogout, TokenRefresh
+from resources.store import Store, StoreList
 from resources.item import Item, ItemList
 from blacklist import BLACKLIST
 
@@ -32,6 +33,8 @@ api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
 api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(User, '/users/<int:_id>')
+api.add_resource(StoreList, '/stores')
+api.add_resource(Store, '/stores/<int:_id>')
 api.add_resource(ItemList, '/items')
 api.add_resource(Item, '/items/<int:_id>')
 
