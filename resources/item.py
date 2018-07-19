@@ -34,8 +34,6 @@ class Item(Resource):
 
         if not item:
             return {'message': f"Can't patch that which doesn't already exist! Please create a new item."}, 400
-        elif item != ItemModel.find_by_name(data['name']):
-            return {'message': f"Sorry the item with name '{data['name']}' is already taken."}, 400
 
         item.price = data['price']
         item.updated_at = strftime("%Y-%m-%d %H:%M:%S", gmtime())
