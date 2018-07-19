@@ -4,18 +4,6 @@ from flask_jwt_extended import jwt_required
 
 from models.item import ItemModel
 
-_item_parser = reqparse.RequestParser()
-_item_parser.add_argument('name',
-                          type=str,
-                          required=True,
-                          help="This field cannot be left blank!"
-                          )
-_item_parser.add_argument('price',
-                          type=float,
-                          required=True,
-                          help="This field cannot be left blank!"
-                          )
-
 
 class Item(Resource):
 
@@ -30,6 +18,12 @@ class Item(Resource):
     @jwt_required
     def patch(self, _id):
         item = ItemModel.find_by_id(_id)
+        _item_parser = reqparse.RequestParser()
+        _item_parser.add_argument('price',
+                                  type=float,
+                                  required=True,
+                                  help="This field cannot be left blank!"
+                                  )
         data = _item_parser.parse_args()
 
         if not item:
@@ -64,6 +58,18 @@ class ItemList(Resource):
 
     @jwt_required
     def post(self):
+        _item_parser = reqparse.RequestParser()
+
+        _item_parser.add_argument('name',
+                                  type=str,
+                                  required=True,
+                                  help="This field cannot be left blank!"
+                                  )
+        _item_parser.add_argument('price',
+                                  type=float,
+                                  required=True,
+                                  help="This field cannot be left blank!"
+                                  )
         data = _item_parser.parse_args()
 
         if ItemModel.find_by_name(data['name']):
@@ -77,5 +83,4 @@ class ItemList(Resource):
             item.save_to_db()
         except:
             return {"message": "An internal error occurred creating the item."}, 500
-
         return item.json(), 201
