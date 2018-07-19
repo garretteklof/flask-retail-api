@@ -43,6 +43,7 @@ class UserSignUp(Resource):
 class User(Resource):
 
     @classmethod
+    @jwt_required
     def get(cls, _id):
         user = UserModel.find_by_id(_id)
         if not user:
@@ -50,6 +51,7 @@ class User(Resource):
         return user.json()
 
     @classmethod
+    @jwt_required
     def delete(cls, _id):
         user = UserModel.find_by_id(_id)
         if not user:
